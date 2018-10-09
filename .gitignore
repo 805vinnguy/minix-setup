@@ -1,0 +1,5 @@
+testtex
+*.pdf
+*.aux
+*.log
+*.gz
