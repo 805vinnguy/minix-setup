@@ -20,8 +20,161 @@
 			as a guest operating system on via an isolated, simulated machine.  The
 			preferred option was to run Minix via the simulated machine since Minix
 			would be isolated from the real machine and would thereby, minimize
-			corruption or data lost in the real machine.  
+			corruption or data lost in the real machine.
 		}
+		\paragraph{
+			First, download VMWare Player, a free version of VMWare's Workstation PC
+			emulator.  Second, download the Minix image on the course website and load
+			it into the simulator.  Power on and Minix should begin booting.
+		}
+	\subsection*{Problems Encountered}
+		\paragraph{
+			None.
+		}
+	\subsection*{Solutions}
+		\paragraph{
+			N/A
+		}
+	\subsection*{Lessons Learned}
+		\paragraph{
+			How to create a virtual machine and boot a guest operating system.
+		}
+\newpage
 
+\section{Log In}
+	\subsection*{Approach}
+		\paragraph{
+			After power on, the machine finishes booting and prompts a login to which
+			\emph{root} is first logged.  Once logged in as root, set password
+			for root using \emph{passwd}.  \emph{passwd} will prompt
+			entering of a new password and reentering of said password to minimize
+			mistyping.
+		}
+	\subsection*{Problems Encountered}
+		\paragraph{
+			None.
+		}
+	\subsection*{Solutions}
+		\paragraph{
+			N/A
+		}
+	\subsection*{Lessons Learned}
+		\paragraph{
+			How to log into a Minix system and set user/superuser password.
+		}
+\newpage
+
+\section{Create a user account}
+	\subsection*{Approach}
+		\paragraph{
+			As root, use the \emph{adduser} command to add a new user to the
+			system, designates their group, and create their home directory.  Use
+			\emph{passwd} as with root to set a password for the new user.
+			To switch from root to any user, use \emph{su} and provide a username.
+		}
+	\subsection*{Problems Encountered}
+		\paragraph{
+			Difficulty with \emph{adduser} command as it required a group and home
+			directory be provided.
+		}
+	\subsection*{Solutions}
+		\paragraph{
+			The Manual page for \emph{adduser} provided that the group \emph{other}
+			could simply be given when first adding a new user.  Using \emph{cd} to
+			navigate up the file directory revealed a \emph{home} directory that is
+			traditionally used, as on the *nix servers, as the directory containing all
+			user directories.
+		}
+	\subsection*{Lessons Learned}
+		\paragraph{
+			When in doubt, consult the Manual pages.
+		}
+\newpage
+		
+\section{Create a Minix disk image and use it to store data}
+	\subsection*{Approach}
+		\paragraph{
+			First, on the *nix servers, create an empty disk image file using:
+			\emph{dd if=/dev/zero of=floppy bs=1024 count=1440}.  Since VMWare is
+			the simulator, rename the file as a \emph{.flp}, and place it in some known
+			location in the host file system.  This image will act as a pseudo-floppy drive
+			for the Minux system.  Using VMWare's hardware wizard, add the .flp file as
+			a floppy drive to the Minix virtual machine.  In Minix, format the file with
+			\emph{format /dev/fd0 1440} and create the Minix filesystem on it with
+			\emph{mkfs -b 1440 -B 1024 /dev/fd0}.  Create a directory with
+			\emph{mkdir /mnt/floppy} and mount the floppy disk onto it with
+			\emph{mount /dev/fd0 /mnt/floppy}.
+		}
+	\subsection*{Problems Encountered}
+		\paragraph{
+			Understanding the parameters for \emph{format}, \emph{mkfs}, and
+			\emph{mount}.
+		}
+	\subsection*{Solutions}
+		\paragraph{
+			Consulted Manual pages and online tutorials to understand that the field
+			\emph{device}/\emph{special} referred to \emph{fd0}, the pseudo-floppy disk.
+			\emph{mount} mounts a device onto a directory.
+		}
+	\subsection*{Lessons Learned}
+		\paragraph{
+			How to create, format, and mount a filesystem in Minix.
+			How to create simulate a memory disk drive for a virtual machine by creating
+			a disk file in the host machine.
+		}
+\newpage
+
+\section{Accessing your data from outside Minix}
+	\subsection*{Approach}
+		\paragraph{
+			There are a few ways to access data from outside Minix.  Namely, the Minix
+			filesystem, which exists in the host machine can be mounted on any Linux
+			machine and have its contents read directly.  The other method is to setup
+			networking.  Since VMWare supports network card emulation, \emph{ssh}
+			and \emph{scp} commands may be used to copy/transfer files/directories
+			to any destination system.  First, use \emph{netconf -a} to configure/enable
+			networking in Minix.
+			Second, create some file, call it test.txt, and some directory, call it test.
+			Use \emph{scp filename/directoryname username@unix*.csc.calpoly.edu:
+			filename/directoryname}.
+		}
+			\subparagraph{
+				* = 1, 2, 3, ... 15
+			}
+	\subsection*{Problems Encountered}
+		\paragraph{
+			Setting up and configuring the network.
+		}
+	\subsection*{Solutions}
+		\paragraph{
+			Found the \emph{netconf} command and used it with argument \emph{-a}.
+		}
+	\subsection*{Lessons Learned}
+		\paragraph{
+			How to use \emph{scp} to copy a file/directory from a filesystem into
+			another.
+		}
+\newpage
+
+\section{Clean up and shutdown}
+	\subsection*{Approach}
+		\paragraph{
+			To safely stop the Minix system, use the \emph{shutdown -r now}
+			command as root.  Once Minix has successfully sent SIGTERM to all processes,
+			close the virtual machine.
+		}
+	\subsection*{Problems Encountered}
+		\paragraph{
+			None.
+		}
+	\subsection*{Solutions}
+		\paragraph{
+			N/A
+		}
+	\subsection*{Lessons Learned}
+		\paragraph{
+			How to safely stop a unix-type guest operating system using \emph{shutdown}.
+		}
+\newpage
 
 \end{document}
